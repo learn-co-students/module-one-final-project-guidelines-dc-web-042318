@@ -1,3 +1,4 @@
 class Event < ActiveRecord::Base
-	belongs_to :historic_date
+	has_many :personevents
+	has_many :people, through: :personevents
 end

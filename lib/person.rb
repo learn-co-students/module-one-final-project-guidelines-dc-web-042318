@@ -1,4 +1,4 @@
 class Person < ActiveRecord::Base
-	belongs_to :life_event, foreign_key: 'death_id'
-	belongs_to :life_event, foreign_key: 'birth_id'
+	has_many :personevents 
+	has_many :events, through: :personevents
 end

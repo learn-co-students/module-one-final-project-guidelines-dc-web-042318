@@ -10,39 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180508210404) do
+ActiveRecord::Schema.define(version: 2018_05_09_133259) do
 
   create_table "events", force: :cascade do |t|
-    t.string  "title"
-    t.string  "description"
-    t.integer "historic_date_id"
-    t.integer "year"
-  end
-
-  create_table "historic_dates", force: :cascade do |t|
-    t.integer "day"
-    t.integer "month"
-  end
-
-  create_table "holidays", force: :cascade do |t|
-    t.integer "year"
-    t.string  "name"
-    t.integer "historic_date_id"
-    t.string  "description"
-    t.string  "occurence"
-  end
-
-  create_table "life_events", force: :cascade do |t|
-    t.integer "historic_date_id"
-    t.integer "person_id"
-    t.integer "year"
+    t.string "title"
+    t.string "description"
+    t.datetime "date"
+    t.string "link"
   end
 
   create_table "people", force: :cascade do |t|
-    t.string  "name"
-    t.integer "death_id"
-    t.integer "birth_id"
-    t.string  "short_bio"
+    t.string "name"
+    t.datetime "death"
+    t.datetime "birth"
+    t.string "title"
+    t.string "link"
+  end
+
+  create_table "personevents", force: :cascade do |t|
+    t.integer "person_id"
+    t.integer "event_id"
   end
 
 end

@@ -3,8 +3,8 @@ class CreateEvents < ActiveRecord::Migration[5.0]
   	create_table :events do |t|
   		t.string :title
   		t.string :description
-  		t.integer :historic_date_id
-  		t.integer :year
+  		t.datetime :date
+  		t.string :link
   	end
   end
 end
