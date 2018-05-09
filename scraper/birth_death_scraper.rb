@@ -3,29 +3,31 @@ require 'pry'
 require 'httparty'
 
 class LifeEvent
-  attr_accessor :html, :event_type
+  attr_accessor :html, :event_type, :month, :day
   attr_writer :name, :title, :link, :year
 
   @@all = []
 
-  def initialize(html, event_type)
+  def initialize(html, event_type, month, day)
     @html = html.children
     @event_type = event_type.downcase
+    @month = month
+    @day = day
     parse
     run
   end
 
   def parse
-    self.html.text.gsub(/\(.*\)/, "").split(' – ').join(', ').split(', ')
+    self.html.text.gsub(/\(.*\)/, '').split(' – ').join(', ').split(', ')
   end
 
   def name
-    self.html.css('a').select { |l| l  if ( l.text[0] =~ /\d/ ).nil? }.first.text
+    self.html.css('a').select { |l| l if (l.text[0] =~ /\d/).nil? }.first.text
   end
 
   def title
     if self.name != parse[2..parse.length]
-      return parse[2..parse.length].join(' ').sub(/\s+\Z/, "")
+      return parse[2..parse.length].join(' ').sub(/\s+\Z/, '')
     else
       return ''
     end
@@ -33,7 +35,7 @@ class LifeEvent
 
   def link
     href = self.html.select { |e| e.text.include?(self.name) }[0].attributes['href'].value
-    "https://en.wikipedia.org/wiki/#{href}"
+    "https://en.wikipedia.org#{href}"
   end
 
   def year
@@ -42,16 +44,18 @@ class LifeEvent
   end
 
   def run
+
     name
     title
     link
     year
     @@all << self
     puts '**********************************************'
-    puts "        #{self.event_type.upcase}"
+    puts "      #{self.event_type.upcase}"
     puts "NAME: #{self.name}"
     puts "TITLE: #{self.title}"
-    puts "YEAR: #{self.year}"
+    puts "DATE: #{self.month} #{self.day}, #{self.year}"
+    puts "LINK: #{self.link}"
   end
 
   def self.all
@@ -66,10 +70,10 @@ def scrape_life_event(month, day)
   ['Birth', 'Death'].each do |event|
     title_h2 = doc.at("h2:contains('#{event}s[edit]')")
     title_h2.at_xpath('following-sibling::ul').css('li').each do |person|
-      LifeEvent.new(person, event)
+      LifeEvent.new(person, event, month, day)
       sleep(0.1)
     end
   end
 end
 
-scrape_life_event('January', 28)
+scrape_life_event('July', 12)
