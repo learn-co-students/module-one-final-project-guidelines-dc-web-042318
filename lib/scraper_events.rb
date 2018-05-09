@@ -13,20 +13,37 @@ class HistoricEvent
   end
 
   def parse
-    self.html.text.gsub(/-/, '–').split(' – ')
+    parsed_text = self.html.text.gsub('-', '–').split(' – ')
+    if parsed_text.length > 1
+      return parsed_text
+    else
+      return ['9999','9999']
+    end
   end
 
   def year
-    parse[0].to_i
+    if parse[0].nil?
+      return 9999
+    else
+      return parse[0].to_i
+    end
   end
 
   def title
-    parse[1]
+    if parse[1].nil?
+      return ''
+    else
+      return parse[1]
+    end
   end
 
   def links
     event_links = self.html.css('a').map { |el| "https://en.wikipedia.org#{el.attributes['href'].value}" }
-    event_links[1..(event_links.length - 1)]
+    if event_links.length > 0
+      return event_links[1..(event_links.length - 1)]
+    else
+      return ['']
+    end
   end
 
   def date
@@ -35,11 +52,16 @@ class HistoricEvent
   end
 
   def run
+    event = Event.find_or_create_by(title: title)
+    event.date = date
+    event.link = links.join(',')
+    event.save
+
     @@all << { title: title, links: links, date: date }
-    puts '**********************************************'
-    puts "TITLE: #{self.title}"
-    puts "DATE: #{self.month} #{self.day}, #{self.year}"
-    puts links
+    # puts '**********************************************'
+    # puts "TITLE: #{self.title}"
+    # puts "DATE: #{self.month} #{self.day}, #{self.year}"
+    # puts links
   end
 
   def self.all
