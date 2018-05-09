@@ -21,16 +21,20 @@ class WikiParser
     parsed_html_response
   end
 
-  def scrape_life_event
-    people = []
+  def scrape_life_events
     ['Birth', 'Death'].each do |event|
       title_h2 = parsed_html_response.at("h2:contains('#{event}s[edit]')")
       title_h2.at_xpath('following-sibling::ul').css('li').each do |person|
-        people << person
+        LifeEvent.new(person, event, self.month, self.day)
       end
     end
-    people
   end
 
+  def scrape_historic_events
+    title_h2 = parsed_html_response.at("h2:contains('Events[edit]')")
+    title_h2.at_xpath('following-sibling::ul').css('li').each do |event|
+      HistoricEvent.new(event, self.month, self.day)
+    end
+  end
 end
 

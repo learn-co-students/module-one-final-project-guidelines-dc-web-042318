@@ -13,9 +13,6 @@ class LifeEvent
     run
   end
 
-  def find_data
-  end
-
   def parse
     self.html.text.gsub(/\(.*\)/, '').split(' – ').join(', ').split(', ')
   end
@@ -38,17 +35,16 @@ class LifeEvent
   end
 
   def year
-    #check BC
     parse[0].to_i
   end
 
-  def run
+  def date
+    event_date = "#{self.month} #{self.day}, #{self.year}"
+    date.parse(event_date)
+  end
 
-    name
-    title
-    link
-    year
-    @@all << self
+  def run
+    @@all << { name: name, title: title, link: link, date: date, event_type: self.event_type }
     puts '**********************************************'
     puts "      #{self.event_type.upcase}"
     puts "NAME: #{self.name}"
