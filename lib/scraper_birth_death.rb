@@ -10,7 +10,8 @@ class LifeEvent
     @month = month
     @day = day
     parse
-    run
+    run rescue nil
+    ''
   end
 
   def parse
@@ -45,7 +46,6 @@ class LifeEvent
 
   def run
     if html.children.length > 1
-
       person = Person.find_or_create_by(link: link)
       person.name = name
       person.title = title

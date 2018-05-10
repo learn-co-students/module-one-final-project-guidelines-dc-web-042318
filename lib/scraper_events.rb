@@ -9,7 +9,8 @@ class HistoricEvent
     @month = month
     @day = day
     parse
-    run
+    run rescue nil
+    ''
   end
 
   def parse
@@ -35,16 +36,16 @@ class HistoricEvent
   end
 
   def run
-    # event = Event.find_or_create_by(title: title)
-    # event.date = date
-    # event.link = links.join(',')
-    # event.save
+    event = Event.find_or_create_by(title: title)
+    event.date = date
+    event.link = links.join(',')
+    event.save
 
-    @@all << { title: title, links: links, date: date }
-    puts '**********************************************'
-    puts "TITLE: #{self.title}"
-    puts "DATE: #{self.month} #{self.day}, #{self.year}"
-    puts links
+    # @@all << { title: title, links: links, date: date }
+    # puts '**********************************************'
+    # puts "TITLE: #{self.title}"
+    # puts "DATE: #{self.month} #{self.day}, #{self.year}"
+    # puts links
   end
 
   def self.all
