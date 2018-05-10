@@ -44,25 +44,25 @@ class LifeEvent
   end
 
   def run
-    if html.children.length > 2
+    if html.children.length > 1
 
-      # person = Person.find_or_create_by(link: link)
-      # person.name = name
-      # person.title = title
-      # if event_type.downcase == 'death'
-      #   person.death = date
-      # elsif event_type.downcase == 'birth'
-      #   person.birth = date
-      # end
-      # person.save
+      person = Person.find_or_create_by(link: link)
+      person.name = name
+      person.title = title
+      if event_type.downcase == 'death'
+        person.death = date
+      elsif event_type.downcase == 'birth'
+        person.birth = date
+      end
+      person.save
 
-      @@all << { name: name, title: title, link: link, date: date, event_type: self.event_type }
-      puts '**********************************************'
-      puts "      #{self.event_type.upcase}"
-      puts "NAME: #{self.name}"
-      puts "TITLE: #{self.title}"
-      puts "DATE: #{self.month} #{self.day}, #{self.year}"
-      puts "LINK: #{self.link}"
+      # @@all << { name: name, title: title, link: link, date: date, event_type: self.event_type }
+      # puts '**********************************************'
+      # puts "      #{self.event_type.upcase}"
+      # puts "NAME: #{self.name}"
+      # puts "TITLE: #{self.title}"
+      # puts "DATE: #{self.month} #{self.day}, #{self.year}"
+      # puts "LINK: #{self.link}"
     end
   end
 
