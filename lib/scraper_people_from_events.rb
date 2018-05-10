@@ -1,16 +1,16 @@
 class ScrapPeopleFromEvent
-	attr_accessor :event_link, :people, :links, :event_id
+	attr_accessor :event_link, :people, :links, :event_id, :event
 
-	def initialize(event_link)
-		@event_link = event_link
+	def initialize(event)
+		@event = event
+		@event_link = event.link
 		@links = links_from_page
-		people_in_this_event
+		assign_people
 	end
 
 	def get_html
     	response = HTTParty.get(event_link)
     	Nokogiri::HTML(response.body)
-
 	end
 
 	def links_from_page
@@ -23,6 +23,10 @@ class ScrapPeopleFromEvent
 	end
 
 	def people_in_this_event
-		people = links_from_page.map {|lnk| Person.find_by(link: lnk)}.compact
+		links_from_page.map {|lnk| Person.find_by(link: lnk)}.compact
+	end
+
+	def assign_people
+		people_in_this_event.each { |p| p.events << self.event }
 	end
 end

@@ -8,3 +8,7 @@ def run_dates
     puts date
   end
 end
+
+def run_connector
+  Event.all.each { |e| e.find_and_assign_people }
+end
