@@ -3,6 +3,7 @@ class CLI_Functions
   def initialize
     initial_screen
     default_menu
+    main_user_selection
   end
 
   def initial_screen
@@ -19,26 +20,31 @@ class CLI_Functions
     puts "4 - A random date in history"
     puts "5 - Enter a person to our database"
     puts "X - Exit"
-    user_selection = gets.chomp
-
+  end
+  def main_user_selection(user_selection = " ")
+      user_selection = gets.chomp
     while user_selection != 'x' do
       case user_selection
       when "1"
 
       when "2"
-        user_selection = ""
-        test_search
-
+        user_selection = search_for_a_person
+        default_menu
+        user_selection = gets.chomp
       when "3"
 
       when "4"
 
       when "5"
 
-        # else
-        #     puts "Please make a valid selection"
-        #     default_menu
+      when "x"
+        break
+      else
+        puts "Please make a valid selection."
+        default_menu
+        user_selection = gets.chomp
       end
+
     end
     puts 'bye!'
   end
@@ -65,8 +71,37 @@ class CLI_Functions
     search = Person.search_individual(input)
     input = ''
     search.each_with_index { |n, i| puts "#{i + 1}. #{n.name}     #{n.title}" }
+    puts "Select the person with index number:"
     input = gets.strip
-    puts search[input.to_i]
-    puts input
+    show_person(search[input.to_i-1])
+    " "
+  end
+
+  def show_person(person)
+    puts "Name: #{person.name}"
+    puts "Birth: #{person.birth.to_s}"
+    puts "Death: #{person.death.to_s}"
+    puts "***************************"
+    puts "Related events:"
+    if !person.events
+      puts "#{person.name} has no related events in our database."
+    else
+      person.events.each do |event|
+        puts event.title
+      end
+    end
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
