@@ -32,15 +32,18 @@ class CLI_Functions
         puts "Enter a date in the MM-DD format:"
         date_value = check_date_format
         user_selection = show_a_date(date_value)
+        sleep(1)
         default_menu
         user_selection = gets.chomp.strip
       when "2"
         user_selection = search_for_a_person
         default_menu
+        sleep(1)
         user_selection = gets.chomp.strip
       when "3"
         user_selection = search_for_an_event
         default_menu
+        sleep(1)
         user_selection = gets.chomp.strip
       when "4"
         user_selection = show_event
@@ -49,6 +52,7 @@ class CLI_Functions
       when "5"
         show_person(Person.random_person)
         default_menu
+        sleep(1)
         user_selection = gets.chomp.strip
       when "6"
         user_selection = fortune_teller
@@ -86,11 +90,15 @@ class CLI_Functions
     puts "Search for an individual"
     input = gets.strip
     search = Person.search_individual(input)
-    input = ''
-    search.each_with_index { |n, i| puts "#{i + 1}. #{n.name}     #{n.title}" }
-    puts "Select the person with index number:"
-    input = gets.strip
-    show_person(search[input.to_i-1])
+    if search.length == 0
+      puts 'Nobody with that name was located.'
+    else
+      input = ''
+      search.each_with_index { |n, i| puts "#{i + 1}. #{n.name}     #{n.title}" }
+      puts "Select the person with index number:"
+      input = gets.strip
+      show_person(search[input.to_i-1])
+    end
     ""
   end
 
@@ -165,14 +173,18 @@ class CLI_Functions
     puts "Search for an event with a keyword"
     input = gets.strip
     search = Event.search_event(input)
-    input = ''
-    search.each_with_index { |n, i| 
-      puts "#{i + 1}. #{n.title} DATE: #{n.date.strftime('%Y-%m-%d')}" 
-      puts "------------------------------------"
-    }
-    puts "Select the event with index number:"
-    input = gets.strip
-    show_event(search[input.to_i-1])
+    if search.length == 0
+      puts 'No event with that name was located.'
+    else
+      input = ''
+      search.each_with_index { |n, i|
+        puts "#{i + 1}. #{n.title} DATE: #{n.date.strftime('%Y-%m-%d')}"
+        puts "------------------------------------"
+      }
+      puts "Select the event with index number:"
+      input = gets.strip
+      show_event(search[input.to_i-1])
+  end
     ""
   end
 
@@ -199,11 +211,12 @@ class CLI_Functions
     puts "    _||_                               _||_ "
     puts "    '--'                               '--'  "
     puts "*********************************************"
-    puts "Enter your birthday in the MM-DD format:"
+    puts "Enter your birthday in the MM-DD-YYYY format:"
     date_value = gets.chomp
     puts "*********************************************"
-    Person.average_age(date_value) 
-      rescue ArgumentError
+    Person.average_age(date_value)
+      rescue
+        # default_menu
     end
       ""
   end
