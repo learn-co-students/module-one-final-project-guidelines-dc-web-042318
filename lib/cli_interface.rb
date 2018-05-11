@@ -26,13 +26,17 @@ class CLI_Functions
     while user_selection != 'x' do
       case user_selection
       when "1"
-
+        user_selection = show_a_date("11-13")
+        default_menu
+        user_selection = gets.chomp
       when "2"
         user_selection = search_for_a_person
         default_menu
         user_selection = gets.chomp
       when "3"
-
+        user_selection = show_event
+        default_menu
+        user_Selection = gets.chomp
       when "4"
 
       when "5"
@@ -88,6 +92,41 @@ class CLI_Functions
     else
       person.events.each do |event|
         puts event.title
+      end
+    end
+  end
+
+  def show_event(event = nil)
+    if !event
+      event = Event.random_event
+    end
+    puts "Event Title: #{event.title}"
+    puts "Event Date: #{event.date}"
+    if event.people
+      puts "People Related: "
+      event.people.each do |person|
+        puts person.name
+      end
+    end
+    " "
+  end
+
+  def show_a_date(date = nil)
+    if !date
+
+    end
+    people_born = Person.search_for_birthday(date)
+    people_died = Person.search_for_deathday(date)
+    events_of_the_day = Event.search_for_a_date(date)
+    puts "Born                      Dead                      Events"
+    puts "*******************************************************************************"
+    i = 0
+    number_of_rows = [people_born.length, people_died.length, events_of_the_day.length].max
+    loop do
+      puts "#{people_born[i].name} - #{people_born[i].birth.to_s.split(" ")[0]}               #{people_died[i].name} - #{people_died[i].death.to_s.split(" ")[0][0..3]}                #{events_of_the_day[i].title} - #{events_of_the_day[i].date.to_s.split(" ")[0][0..3]}"
+      i += 1
+      if i >= number_of_rows
+        break
       end
     end
   end
