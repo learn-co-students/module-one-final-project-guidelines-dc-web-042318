@@ -31,8 +31,11 @@ class Person < ActiveRecord::Base
 		Person.all[index]
 	end
 
-	def self.random_births_and_deaths(date, number_of_rows = 5)
+	def self.random_births(date, number_of_rows = 5)
 		Person.search_for_birthday(date).order(date).sample(number_of_rows)
+	end
+
+		def self.random_deaths(date, number_of_rows = 5)
 		Person.search_for_deathday(date).order(date).sample(number_of_rows) 
 	end
 
