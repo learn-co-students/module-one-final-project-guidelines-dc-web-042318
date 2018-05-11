@@ -18,7 +18,7 @@ class CLI_Functions
     puts "2 - Search for a person"
     puts "3 - Search for an event"
     puts "4 - A random date in history"
-    puts "5 - Enter a person to our database"
+    puts "5 - Fortuneteller"
     puts "x - Exit"
   end
   def main_user_selection(user_selection = " ")
@@ -44,7 +44,9 @@ class CLI_Functions
         default_menu
         user_selection = gets.chomp.strip
       when "5"
-
+        user_selection = fortune_teller
+        default_menu
+        user_selection = gets.chomp.strip
       when "x"
         break
       else
@@ -161,6 +163,37 @@ class CLI_Functions
     puts "Select the event with index number:"
     input = gets.strip
     show_event(search[input.to_i-1])
+    ""
+  end
+
+  def fortune_teller
+
+    puts "                     .---."
+    puts "                   .'_..._'."
+    puts "                  .''_   _''."
+    puts "                 .' :  '  : '."
+    puts "                .'_.-'_~_'-._'."
+    puts "               .'(     '     )'."
+    puts "              .'  \ \     / /  '."
+    puts "             .'    \ \   / /    '."
+    puts "       ____________'''` '```____________ "
+    puts "      /              .''.               \ "
+    puts "     /              (  ` )               \ "
+    puts "    /               .'..'.                \ "
+    puts "   /                '----'                 \ "
+    puts "  /_________________________________________\ "
+    puts "    \  /'--'                       '--'\  / "
+    puts "     ||                                 || "
+    puts "     ||                                 || "
+    puts "    _||_                               _||_ "
+    puts "    '--'                               '--'  "
+    puts "*********************************************"
+    puts "Enter your birthday in the MM-DD format:"
+    date_value = gets.chomp
+    puts "*********************************************"
+        age = Person.average_age(date_value)
+    puts "*********************************************"
+    puts "YOU WILL DIE WHEN YOU ARE #{age}!!!!!!!!!!"
     ""
   end
 end
