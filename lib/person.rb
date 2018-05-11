@@ -31,10 +31,9 @@ class Person < ActiveRecord::Base
 		Person.all[index]
 	end
 
-	def self.random_births_and_deaths(date)
-		Person.search_for_birthday(date).sample(5).each { |n| puts "BIRTH (#{n.birth.strftime('%Y')}): #{n.name}, #{n.title} (#{n.link})"}
-		puts '************************************************************'
-		Person.search_for_deathday(date).sample(5).each { |n| puts "DEATH (#{n.death.strftime('%Y')}): #{n.name}, #{n.title} (#{n.link})"}
+	def self.random_births_and_deaths(date, number_of_rows = 5)
+		Person.search_for_birthday(date).order(date).sample(number_of_rows)
+		Person.search_for_deathday(date).order(date).sample(number_of_rows) 
 	end
 
 	#  def average_age(date)
