@@ -20,7 +20,7 @@ class Event < ActiveRecord::Base
 	end
 
 	def self.random_events_by_date(date, number_of_rows = 5)
-		Event.search_for_a_date(date).sample(number_of_rows).each { |e| puts "#{e.date.strftime('%Y')}: #{e.title} (#{e.link})"}
+		Event.search_for_a_date(date).sample(number_of_rows)
 	end
 
 	def find_and_assign_people

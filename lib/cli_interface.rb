@@ -2,11 +2,13 @@ class CLI_Functions
 
   def initialize
     initial_screen
+    initial_animation
     default_menu
     main_user_selection
   end
 
   def initial_screen
+    puts "**********************************"
     puts "Welcome to the Date in the History"
     puts "**********************************"
     puts "For now, we have #{Event.all.length} events, #{Person.all.length} people and #{Personevent.all.length} relationships in our database."
@@ -17,8 +19,9 @@ class CLI_Functions
     puts "1 - Search for a date"
     puts "2 - Search for a person"
     puts "3 - Search for an event"
-    puts "4 - A random date in history"
-    puts "5 - Fortuneteller"
+    puts "4 - A random event in history"
+    puts "5 - A random person in history"
+    puts "6 - Fortune teller"
     puts "x - Exit"
   end
   def main_user_selection(user_selection = " ")
@@ -27,7 +30,7 @@ class CLI_Functions
       case user_selection
       when "1"
         puts "Enter a date in the MM-DD format:"
-        date_value = gets.chomp
+        date_value = check_date_format
         user_selection = show_a_date(date_value)
         default_menu
         user_selection = gets.chomp.strip
@@ -44,6 +47,10 @@ class CLI_Functions
         default_menu
         user_selection = gets.chomp.strip
       when "5"
+        show_person(Person.random_person)
+        default_menu
+        user_selection = gets.chomp.strip
+      when "6"
         user_selection = fortune_teller
         default_menu
         user_selection = gets.chomp.strip
@@ -96,7 +103,7 @@ class CLI_Functions
       puts "Death: #{person.death.strftime('%Y-%m-%d')}"
     end
 
-    if !person.events
+    if person.events.length == 0
       puts "#{person.name} has no related events in our database."
     else
     puts "***************************"
@@ -114,8 +121,11 @@ class CLI_Functions
     puts "*************************************"
     puts "Event Title: #{event.title}"
     puts "Event Date: #{event.date.strftime('%Y-%m-%d')}"
-    if event.people
-      puts "People Related: "
+    if event.people.length == 0
+      puts "*************************************"
+      puts "Nobody in our database is connected to this event."
+    else
+      puts "Related people: "
       event.people.each do |person|
         puts person.name
       end
@@ -167,6 +177,7 @@ class CLI_Functions
   end
 
   def fortune_teller
+    begin
 
     puts "                     .---."
     puts "                   .'_..._'."
@@ -191,11 +202,32 @@ class CLI_Functions
     puts "Enter your birthday in the MM-DD format:"
     date_value = gets.chomp
     puts "*********************************************"
-        age = Person.average_age(date_value)
-    puts "*********************************************"
-    puts "YOU WILL DIE WHEN YOU ARE #{age}!!!!!!!!!!"
-    ""
+    Person.average_age(date_value) 
+      rescue ArgumentError
+    end
+      ""
   end
+
+  def initial_animation
+    puts "        __..._   _...__ "
+    puts "  _..-''      `Y`      '-._ "
+    puts "  \ Once upon |           / "
+    puts "  \\  a time..|          // "
+    puts "  \\\         |         /// "
+    puts "   \\\ _..---.|.---.._ /// "
+    puts "    \\`_..---.Y.---.._`// "
+    puts "     '`               `' "
+   end
+
+   def check_date_format
+    user_input = gets.chomp
+    while user_input.length != 5 || user_input[2] != "-" || user_input.split("-")[1].to_i >31 || user_input.split("-")[0].to_i > 12 do
+      puts "Invalid date format. Please enter the date in MM-DD format"
+      user_input = gets.chomp
+    end
+    user_input
+   end
+
 end
 
 

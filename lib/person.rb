@@ -39,13 +39,16 @@ class Person < ActiveRecord::Base
 		Person.search_for_deathday(date).order(date).sample(number_of_rows) 
 	end
 
-	def self.average_age(date)
-		births_and_deaths = Person.search_for_birthday(date).where('birth AND death')
+def self.average_age(date)
+		user_bday = date.split('-')
+		birth_date = "#{user_bday[0]}-#{user_bday[1]}"
+		births_and_deaths = Person.search_for_birthday(birth_date).where('birth AND death')
 		average_seconds = births_and_deaths.map { |p| (p.death - p.birth) }.inject { |sum, n| (sum + n) } / births_and_deaths.length
-		years = average_seconds.divmod(31557600).first
-		days = (average_seconds.divmod(31557600).last) / 86400
-		puts "On #{date}, the average age of a deceased historical figure is #{years} years and #{days.to_i} days."
-		years
+		average_years = average_seconds.divmod(31557600).first
+		average_days = (average_seconds.divmod(31557600).last) / 86400
+		user_death = Date.strptime(date, "%m-%d-%Y").to_datetime + average_seconds.seconds
+		puts "Among deceased historical figures born on #{birth_date}, the average age was #{average_years} years and #{average_days.to_i} days; #{average_years} years and #{average_days.to_i} days from #{date} is #{user_death.to_date.strftime('%m-%d-%Y')}..."
+		''
 	end
 
 end
